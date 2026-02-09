@@ -1,0 +1,22 @@
+# virtual env
+.venv/
+
+# python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# packaging
+dist/
+build/
+*.egg-info/
+
+# testing
+.pytest_cache/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
