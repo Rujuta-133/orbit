@@ -32,6 +32,21 @@ class TaskManager:
         with open(self.storage_path, "w") as file:
             json.dump(serialized_tasks, file)   
 
+    
+    def delete_task(self, task_id: int):
+        task_to_delete = None
+        for task in self.task_list:
+            if task.id == task_id:
+                task_to_delete = task
+                break
+        
+        if task_to_delete is not None:
+            self.task_list.remove(task_to_delete)
+            self._save_to_file()
+            return task_to_delete
+        else:
+            return None
+
 
 
 
