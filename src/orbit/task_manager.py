@@ -46,6 +46,20 @@ class TaskManager:
             return task_to_delete
         else:
             return None
+        
+
+    def mark_completed(self, task_id: int):
+        for task in self.task_list:
+            if task.id == task_id:
+                if not task.completed:
+                    task.completed = True
+                    self._save_to_file()
+                    return task
+                else:
+                    return task
+    
+        return None
+
 
 
 
