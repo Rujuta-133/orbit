@@ -10,7 +10,8 @@ def main():
 
     command = sys.argv[1]
     commands = {
-        "list" : handle_list
+        "list" : handle_list,
+        "add" : handle_add
     }
     
 
@@ -20,24 +21,6 @@ def main():
         handler(manager, sys.argv[2:])
         return
 
-    
-    
-    #if command == "list":
-        
-        #tasks = manager.list_current_tasks()
-        #if len(tasks) == 0:
-        #   print("No tasks found")
-        #else:
-        #    for task in tasks:
-        #        print(task)
-    elif command == "add":
-        if len(sys.argv) < 3:
-            print("Description Required")
-            sys.exit()
-            
-        description = sys.argv[2]
-        task = manager.add_task(description)
-        print(f"Added task: {task.id} {task.description}")
 
     elif command == "delete":
         if len(sys.argv) < 3:
@@ -78,16 +61,26 @@ def main():
 
 
 def handle_list(manager, args):
-        if len(args) != 0:
-            print("List command does not take any arguments")
-            sys.exit()
+    if len(args) != 0:
+        print("List command does not take any arguments")
+        sys.exit()
 
-        tasks = manager.list_current_tasks()
-        if len(tasks) == 0:
-            print("No tasks found")
-        else:
-            for task in tasks:
-                print(task)
+    tasks = manager.list_current_tasks()
+    if len(tasks) == 0:
+        print("No tasks found")
+    else:
+        for task in tasks:
+            print(task)
+
+def handle_add(manager, args):
+    if len(args) < 1:
+        print("Description required")
+        sys.exit()
+
+    description = args[0]
+    task = manager.add_task(description)
+    print(f"Added task: {task.id} {task.description}")
+
 
         
 
