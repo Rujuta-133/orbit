@@ -11,7 +11,8 @@ def main():
     command = sys.argv[1]
     commands = {
         "list" : handle_list,
-        "add" : handle_add
+        "add" : handle_add,
+        "delete" : handle_delete
     }
     
 
@@ -20,24 +21,7 @@ def main():
     if handler:
         handler(manager, sys.argv[2:])
         return
-
-
-    elif command == "delete":
-        if len(sys.argv) < 3:
-            print("Task ID required")
-            sys.exit()
-        
-        task_id_str = sys.argv[2]
-        try:
-            task_id = int(task_id_str)
-        except ValueError:
-            print("Task ID must be an integer")
-            sys.exit()
-        delete_task_object = manager.delete_task(task_id)
-        if delete_task_object is None:
-            print("Task not found")
-        else:
-            print(f"Deleted Task: {delete_task_object.id} {delete_task_object.description}")
+    
 
     elif command == "complete":
         if len(sys.argv) < 3:
@@ -81,8 +65,24 @@ def handle_add(manager, args):
     task = manager.add_task(description)
     print(f"Added task: {task.id} {task.description}")
 
+def handle_delete(manager, args):
+    if len(args) < 1:
+            print("Task ID required")
+            sys.exit()
 
-        
+    task_id_str = args[0]
+    try:
+        task_id = int(task_id_str)
+    except ValueError:
+        print("Task ID must be an integer")
+        sys.exit()
+
+    delete_task_object = manager.delete_task(task_id)
+    if delete_task_object is None:
+        print("Task not found")
+    else:
+        print(f"Deleted Task: {delete_task_object.id} {delete_task_object.description}")
+
 
 if __name__ == "__main__":
     main()
