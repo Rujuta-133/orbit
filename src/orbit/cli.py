@@ -9,15 +9,27 @@ def main():
         sys.exit()
 
     command = sys.argv[1]
+    commands = {
+        "list" : handle_list
+    }
+    
+
+    handler = commands.get(command)
     manager = TaskManager()
-    if command == "list":
+    if handler:
+        handler(manager, sys.argv[2:])
+        return
+
+    
+    
+    #if command == "list":
         
-        tasks = manager.list_current_tasks()
-        if len(tasks) == 0:
-            print("No tasks found")
-        else:
-            for task in tasks:
-                print(task)
+        #tasks = manager.list_current_tasks()
+        #if len(tasks) == 0:
+        #   print("No tasks found")
+        #else:
+        #    for task in tasks:
+        #        print(task)
     elif command == "add":
         if len(sys.argv) < 3:
             print("Description Required")
@@ -63,6 +75,19 @@ def main():
 
     else:
         print("Unknown command")
+
+
+def handle_list(manager, args):
+        if len(args) != 0:
+            print("List command does not take any arguments")
+            sys.exit()
+
+        tasks = manager.list_current_tasks()
+        if len(tasks) == 0:
+            print("No tasks found")
+        else:
+            for task in tasks:
+                print(task)
 
         
 
