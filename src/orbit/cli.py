@@ -12,36 +12,20 @@ def main():
     commands = {
         "list" : handle_list,
         "add" : handle_add,
-        "delete" : handle_delete
+        "delete" : handle_delete,
+        "complete" : handle_complete
     }
     
 
     handler = commands.get(command)
-    manager = TaskManager()
+    
     if handler:
+        manager = TaskManager()
         handler(manager, sys.argv[2:])
         return
-    
-
-    elif command == "complete":
-        if len(sys.argv) < 3:
-            print("Task ID required")
-            sys.exit()
-
-        task_id_str = sys.argv[2]
-        try:
-            task_id = int(task_id_str)
-        except ValueError:
-            print("Task ID must be an integer")
-            sys.exit()
-        complete_task_object = manager.mark_completed(task_id)
-        if complete_task_object is None:
-            print("Task not found")
-        else:
-            print("Task marked as completed")
-
     else:
         print("Unknown command")
+
 
 
 def handle_list(manager, args):
@@ -82,6 +66,25 @@ def handle_delete(manager, args):
         print("Task not found")
     else:
         print(f"Deleted Task: {delete_task_object.id} {delete_task_object.description}")
+
+def handle_complete(manager, args):
+    if len(args) < 1:
+        print("Task ID required")
+        sys.exit()
+    
+    task_id_str = args[0]
+    try:
+        task_id = int(task_id_str)
+    except ValueError:
+        print("Task ID must be an integer")
+        sys.exit()
+    
+    complete_task_object = manager.mark_completed(task_id)
+    if complete_task_object is None:
+        print("Task not found")
+    else:
+        print("Task marked as completed")
+
 
 
 if __name__ == "__main__":
