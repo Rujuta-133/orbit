@@ -107,19 +107,15 @@ def test_mark_completed_idempotent():
         os.remove("test_tasks.json")
 
 
-def test_mark_completed_idempotent():
+def test_mark_completed_nonexistent():
     if os.path.exists("test_tasks.json"):
         os.remove("test_tasks.json")
 
     manager = TaskManager("test_tasks.json")
 
-    manager.add_task("Task 1")
+    result = manager.mark_completed(999)
 
-    first = manager.mark_completed(1)
-    second = manager.mark_completed(1)
-
-    assert first.completed is True
-    assert second.completed is True
+    assert result is None
 
     if os.path.exists("test_tasks.json"):
         os.remove("test_tasks.json")
