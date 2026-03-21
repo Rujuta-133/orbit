@@ -59,6 +59,14 @@ class TaskManager:
                     return task
     
         return None
+    
+    def update_task(self, task_id: int, description: str):
+        for task in self.task_list:
+            if task.id == task_id:
+                task.description = description
+                self._save_to_file()
+                return task
+        return None
 
 
 

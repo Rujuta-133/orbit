@@ -13,7 +13,8 @@ def main():
         "list" : handle_list,
         "add" : handle_add,
         "delete" : handle_delete,
-        "complete" : handle_complete
+        "complete" : handle_complete,
+        "update" : handle_update
     }
     
 
@@ -84,6 +85,27 @@ def handle_complete(manager, args):
         print("Task not found")
     else:
         print("Task marked as completed")
+
+
+def handle_update(manager, args):
+    if len(args) < 2:
+        print("Task ID and description required")
+        sys.exit()
+
+    
+    task_id_str = args[0]
+    description = " ".join(args[1:])
+    try:
+        task_id = int(task_id_str)
+    except ValueError:
+        print("Task ID must be an integer")
+        sys.exit()
+    
+    updated_task_object = manager.update_task(task_id, description)
+    if updated_task_object is None:
+        print("Task not found")
+    else:
+        print(f"Updated Task: {updated_task_object.id} Description: {updated_task_object.description}")
 
 
 
