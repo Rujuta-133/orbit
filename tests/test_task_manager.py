@@ -120,6 +120,40 @@ def test_mark_completed_nonexistent():
     if os.path.exists("test_tasks.json"):
         os.remove("test_tasks.json")
 
+def test_update_task():
+    if os.path.exists("test_tasks.json"):
+        os.remove("test_tasks.json")
+
+    manager = TaskManager("test_tasks.json")
+    task1 = manager.add_task("Test 1")
+    updated = manager.update_task(1, "Test Task Updated")
+    
+    assert updated is not None
+    assert task1.description == "Test Task Updated"
+    assert task1.id == 1
+
+    assert manager.task_list[0].description == "Test Task Updated"
+
+    if os.path.exists("test_tasks.json"):
+        os.remove("test_tasks.json")
+
+def test_nonexistent_update_task():
+    if os.path.exists("test_tasks.json"):
+        os.remove("test_tasks.json")
+
+    manager = TaskManager("test_tasks.json")
+
+    updated = manager.update_task(999, "Test Task Updated")
+
+    assert updated is None
+
+    if os.path.exists("test_tasks.json"):
+        os.remove("test_tasks.json")
+
+
+
+
+
 
 
     
