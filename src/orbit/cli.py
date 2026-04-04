@@ -1,4 +1,5 @@
 from orbit.task_manager import TaskManager
+from orbit.storage import InMemoryStorage, JSONStorage
 import sys
 
 
@@ -21,7 +22,8 @@ def main():
     handler = commands.get(command)
     
     if handler:
-        manager = TaskManager()
+        storage = JSONStorage("tasks.json")
+        manager = TaskManager(storage)
         handler(manager, sys.argv[2:])
         return
     else:
