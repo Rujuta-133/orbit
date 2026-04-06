@@ -1,25 +1,21 @@
 from orbit.task_manager import TaskManager
-import os
+from orbit.storage import InMemoryStorage
 
 def test_add_task():
-    if os.path.exists("test_tasks.json"):
-        os.remove("test_tasks.json")
-
-    manager = TaskManager("test_tasks.json")
+    storage = InMemoryStorage()
+    manager = TaskManager(storage)
     task = manager.add_task("Test Task")
 
     assert task.id == 1
     assert task.description == "Test Task"
     assert not task.completed 
 
-    if os.path.exists("test_tasks.json"):
-        os.remove("test_tasks.json")
+  
 
 def test_multiple_tasks():
-    if os.path.exists("test_tasks.json"):
-        os.remove("test_tasks.json")
 
-    manager = TaskManager("test_tasks.json")
+    storage = InMemoryStorage()
+    manager = TaskManager(storage)
     task1 = manager.add_task("Task 1")
     task2 = manager.add_task("Task 2")
 
@@ -31,14 +27,12 @@ def test_multiple_tasks():
     assert not task2.completed
     assert len(manager.task_list) == 2
 
-    if os.path.exists("test_tasks.json"):
-        os.remove("test_tasks.json")
+    
 
 def test_delete_tasks():
-    if os.path.exists("test_tasks.json"):
-        os.remove("test_tasks.json")
 
-    manager = TaskManager("test_tasks.json")
+    storage = InMemoryStorage()
+    manager = TaskManager(storage)
     task1 = manager.add_task("Task 1")
     task2 = manager.add_task("Task 2")
     task3 = manager.add_task("Task 3")
@@ -50,31 +44,22 @@ def test_delete_tasks():
     remaining_ids = [task.id for task in manager.task_list]
     assert 1 not in remaining_ids
 
-    if os.path.exists("test_tasks.json"):
-        os.remove("test_tasks.json")
-
 
 def test_delete_nonexistent_task():
-    if os.path.exists("test_tasks.json"):
-        os.remove("test_tasks.json")
 
-    manager = TaskManager("test_tasks.json")
+    storage = InMemoryStorage()
+    manager = TaskManager(storage)
     task = manager.add_task("Task 1")
     deleted = manager.delete_task(999)
 
     assert deleted is None
 
-    if os.path.exists("test_tasks.json"):
-        os.remove("test_tasks.json")
-
 
 
 def test_mark_completed():
-    if os.path.exists("test_tasks.json"):
-        os.remove("test_tasks.json")
 
-    manager = TaskManager("test_tasks.json")
-
+    storage = InMemoryStorage()
+    manager = TaskManager(storage)
     task = manager.add_task("Task 1")
     updated = manager.mark_completed(1)
 
@@ -85,15 +70,11 @@ def test_mark_completed():
     # check state inside manager
     assert manager.task_list[0].completed is True
 
-    if os.path.exists("test_tasks.json"):
-        os.remove("test_tasks.json")
 
 
 def test_mark_completed_idempotent():
-    if os.path.exists("test_tasks.json"):
-        os.remove("test_tasks.json")
-
-    manager = TaskManager("test_tasks.json")
+    storage = InMemoryStorage()
+    manager = TaskManager(storage)
 
     manager.add_task("Task 1")
 
@@ -103,28 +84,20 @@ def test_mark_completed_idempotent():
     assert first.completed is True
     assert second.completed is True
 
-    if os.path.exists("test_tasks.json"):
-        os.remove("test_tasks.json")
-
 
 def test_mark_completed_nonexistent():
-    if os.path.exists("test_tasks.json"):
-        os.remove("test_tasks.json")
-
-    manager = TaskManager("test_tasks.json")
+    storage = InMemoryStorage()
+    manager = TaskManager(storage)
 
     result = manager.mark_completed(999)
 
     assert result is None
 
-    if os.path.exists("test_tasks.json"):
-        os.remove("test_tasks.json")
 
 def test_update_task():
-    if os.path.exists("test_tasks.json"):
-        os.remove("test_tasks.json")
+    storage = InMemoryStorage()
+    manager = TaskManager(storage)
 
-    manager = TaskManager("test_tasks.json")
     task1 = manager.add_task("Test 1")
     updated = manager.update_task(1, "Test Task Updated")
     
@@ -134,21 +107,14 @@ def test_update_task():
 
     assert manager.task_list[0].description == "Test Task Updated"
 
-    if os.path.exists("test_tasks.json"):
-        os.remove("test_tasks.json")
-
 def test_nonexistent_update_task():
-    if os.path.exists("test_tasks.json"):
-        os.remove("test_tasks.json")
-
-    manager = TaskManager("test_tasks.json")
+    
+    storage = InMemoryStorage()
+    manager = TaskManager(storage)
 
     updated = manager.update_task(999, "Test Task Updated")
 
     assert updated is None
-
-    if os.path.exists("test_tasks.json"):
-        os.remove("test_tasks.json")
 
 
 
